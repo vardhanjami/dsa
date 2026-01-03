@@ -135,7 +135,7 @@ public class ConstantWindow {
         }
     public static void main(String[] args) {
         int arr[]={1,1,1,0,0,0,1,1,1,1,0};
-        System.out.println(maxOnes(arr, 2));
+        System.out.println("length is :"+maxOnes(arr, 2));
         // String s="abcndsjdsd";
         // System.out.println(longsubstring(s));
         // int[] arr={6,7,3,1,8,2,4,8,1,9,2};
