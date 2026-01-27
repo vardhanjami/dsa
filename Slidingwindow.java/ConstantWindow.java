@@ -1,8 +1,4 @@
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.ArrayList;
-
 
 public class ConstantWindow {
     public static int maxseq(int arr[],int k){
@@ -60,7 +56,7 @@ public class ConstantWindow {
                 xsum+=arr[r];
                 l=r+1;
                 ysum+=arr[l];
-            }            
+            }
             // if(l<arr.length)
             // // l=r+1;
             // ysum+=arr[r];
@@ -133,10 +129,122 @@ public class ConstantWindow {
             }
             return maxlen;
         }
+        public static int Buckets(int arr[]){
+            int l=0;
+            int r=0;
+            int maxlen=0;
+            int k=2;
+            HashMap<Integer,Integer> mpp =new HashMap<>();
+            while(r<arr.length){
+                mpp.put(arr[r], mpp.getOrDefault(arr[r],0)+1);
+                if(mpp.size()>k){
+                    mpp.put(arr[l],mpp.get(arr[l])-1);
+                    if(mpp.get(arr[l])==0)
+                        mpp.remove(arr[l]);
+                l++;
+                }
+                if(mpp.size()<=k)
+                    maxlen=Math.max(maxlen, r-l+1);
+                r++;
+            }
+            return maxlen;
+        }
+        public static int distinctSubstring(String s,int k){
+            int l=0;
+            int r=0;
+            int maxlen=0;
+            int hash[]=new int[256];
+            HashMap <Character,Integer> mpp= new HashMap<>();
+            for(int i=0;i<256;i++){
+                hash[i]=-1;
+            }
+            while(r<s.length()){
+                mpp.put(s.charAt(r), mpp.getOrDefault(s.charAt(r), 0) + 1);
+                if(mpp.size()>k){
+                    hash[s.charAt(l)]--;
+                    if(hash[s.charAt(l)]==0){
+                        mpp.remove(s.charAt(l));
+                    }
+                    l=l+1;
+                }
+                if(mpp.size()<=2){
+                    maxlen=Math.max(maxlen, r-l+1);
+                }
+                r++;
+            }
+            return maxlen;
+        }
+        public static int substringwithallchar(String s){
+            int cnt=0;
+            int[] lastseen={-1,-1,-1};
+            for(int i=0;i<s.length();i++){
+                lastseen[s.charAt(i)-'a']= i;
+                if(lastseen[0]!=-1 && lastseen[1]!=-1 && lastseen[2]!=-1){
+                    cnt = cnt + (1 + Math.min(lastseen[0],
+                        Math.min(lastseen[1], lastseen[2])));
+                }
+            }
+            return cnt;
+        }
+        public static int countAtmost(int[] nums,int goal){
+            int l=0;
+            int r=0;
+            int sum=0;
+            int cnt=0;
+            while(r<nums.length){
+                sum+=nums[r];
+                while(sum>goal){
+                    sum-=nums[l];
+                    l++;
+                }
+                cnt+=r-l+1;
+                r=r+1;
+            }
+            return cnt;
+        }
+        public static int longrepcharrep(String s,int k){
+            int l=0;
+            int r=0;
+            int maxf=0;
+            int maxlen=0;
+            int[] hash=new int[26];
+            for(int i=0;i<26;i++){
+                hash[i]=0;
+            }
+            while(r<s.length()){
+                hash[s.charAt(r)-'A']++;
+                maxf=Math.max(maxf,hash[s.charAt(r)-'A']);
+                if((r-l+1)-maxf>k){
+                    hash[s.charAt(l)-'A']--;
+                    maxf=0;
+                    l=l+1;
+                }
+                if((r-l+1)-maxf<=k){
+                    maxlen=Math.max(maxlen,r-l+1);
+                }
+                r++;
+            }
+            return maxlen;
+        }
+
     public static void main(String[] args) {
-        int arr[]={1,1,1,0,0,0,1,1,1,1,0};
-        System.out.println("length is :"+maxOnes(arr, 2));
-        // String s="abcndsjdsd";
+        String s="AABABABA";
+        int k=2;
+        System.out.println("Longest repetiting Character with replacement: "+longrepcharrep(s, k));
+        // int[] nums={1,0,0,1,0,1,0};
+        // int goal=2;
+        // System.out.println("Binary subarrays with sum 2 are: "+(countAtmost(nums, goal)-countAtmost(nums, goal-1)));
+        //System.out.println("no of substrings containing all the three characters are :"+substringwithallchar("abca"));
+        // String s="aabbbaacdeaaasseee";
+        // int k=2;
+        // System.out.println("Maxlength of the string is : "+distinctSubstring(s, k));
+        
+        // int arr[]={3,3,3,4,5,2,2,1,1,1,2,4,5};
+        // System.out.println("Maxlength is: "+Buckets(arr));
+
+        // int arr[]={1,1,1,0,0,0,1,1,1,1,0};
+        // System.out.println("length is :"+maxOnes(arr, 2));
+        // // String s="abcndsjdsd";
         // System.out.println(longsubstring(s));
         // int[] arr={6,7,3,1,8,2,4,8,1,9,2};
         // int k=4;
