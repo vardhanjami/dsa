@@ -226,11 +226,88 @@ public class ConstantWindow {
             }
             return maxlen;
         }
+        public static int nicesubarrays(int nums[],int k){
+            int l=0;
+            int r=0;
+            int cnt=0;
+            int sum=0;
+            while(r<nums.length){
+                sum=sum+(nums[r]%2);
+                while(sum>k){
+                    sum-=nums[l]%2;
+                    l=l+1;
+                }
+                cnt=cnt+(r-l+1);
+                r=r+1;
+            }
+            return cnt;
+        }
+        public static int subwithkdis(int nums[],int k){
+            int l=0;
+            int r=0;
+            int cnt=0;
+            HashMap <Integer,Integer> mpp= new HashMap<>();
+            while(r<nums.length){
+                mpp.put(nums[r],mpp.getOrDefault(nums[r],0)+1);
+                while(mpp.size()>k){
+                    mpp.put(nums[l],mpp.get(nums[l])-1);
+                    if(mpp.get(nums[l])==0){
+                        mpp.remove(nums[l]);
+                    }
+                    l=l+1;
+                }
+                cnt+=(r-l+1);
+                r=r+1;
+            }
+            return cnt;
+        }
+        public static String minwinsubs(String s,String t){
+            int n=s.length();
+            int m=t.length();
+            if(m>n) return "";
+            int[] hash=new int[256];
+            for(int i=0;i<m;i++){
+                hash[t.charAt(i)]++;
+            }
+            int l=0;
+            int r=0;
+            int minlen= Integer.MAX_VALUE;
+            int cnt=0;
+            int sIndex=-1;
+            while(r<n){
+                if(hash[s.charAt(r)]>0){
+                    cnt+=1;
+                }
+                hash[s.charAt(r)]--;
+                while(cnt==m){
+                    if((r-l+1)<minlen){
+                        minlen=(r-l+1);
+                        sIndex=l; 
+                    }
+                    hash[s.charAt(l)]++;
+                    if(hash[s.charAt(l)]>0){
+                        cnt=cnt-1;
+                    }
+                    l=l+1;   
+                }
+                r=r+1;
+            }
+            return sIndex==-1?"":s.substring(sIndex,(sIndex+minlen));
+        }
 
     public static void main(String[] args) {
-        String s="AABABABA";
-        int k=2;
-        System.out.println("Longest repetiting Character with replacement: "+longrepcharrep(s, k));
+        String s="AKABCCVDHVSJBKKBADSGASC";
+        String t="ABD";
+        System.out.println("Minimum length window with substring: "+minwinsubs(s, t));
+        // int nums[]={2,1,1,1,4,2,3,2,5};
+        // int k=3;
+        // System.out.println("Subarrays with k different integers: "+(subwithkdis(nums,k)-subwithkdis(nums,k-1)));
+        // int[] nums={1,1,2,3,1,3,1};
+        // int k=3;
+        // System.out.println("Subarrays with k odd integers/ nice subarrays :"+(nicesubarrays(nums, k)-nicesubarrays(nums, k-1)));
+        // // String s="AABABABA";
+        // int k=2;
+        // System.out.println("Longest repetiting Character with replacement: "+longrepcharrep(s, k));
         // int[] nums={1,0,0,1,0,1,0};
         // int goal=2;
         // System.out.println("Binary subarrays with sum 2 are: "+(countAtmost(nums, goal)-countAtmost(nums, goal-1)));
